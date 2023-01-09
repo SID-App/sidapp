@@ -1,4 +1,4 @@
-import {OnboardingStackNavigatorParams} from '@/navigation/OnboardingStack';
+import {OnboardingStackNavigatorParams} from '@/navigation/onboarding/OnboardingStack';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
 import {Text} from 'react-native';

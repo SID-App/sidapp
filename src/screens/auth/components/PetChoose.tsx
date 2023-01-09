@@ -87,8 +87,7 @@ const styles = StyleSheet.create({
 		paddingTop: scaledHeight(10),
 	},
 	flatList: {
-		flexDirection: 'row',
-		flexWrap: 'wrap',
+		flexDirection: 'column',
 	},
 	petChooseRowView: {
 		flexDirection: 'row',

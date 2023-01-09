@@ -1,24 +1,24 @@
 import ArrowRightSvg from '@/assets/svg/ArrowRightSvg';
 import SidButton from '@/components/SidButton';
-import SidCheckbox from '@/components/SidCheckbox';
-import SidInput from '@/components/SidInput';
+import SidCodeInput from '@/components/SidCodeInput';
 import SidText from '@/components/SidText';
+import {SignInStackParams} from '@/navigation/auth/SignInStack';
 import {SignUpStackParams} from '@/navigation/auth/SignUpStack';
 import {colors, fonts, padding} from '@/theme';
 import {scaledHeight, scaledWidth} from '@/utils/responsive';
+import {CompositeScreenProps} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useRef, useState} from 'react';
 import {Dimensions, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import Carousel from 'react-native-reanimated-carousel';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 
-type GeneralInformationScreenParams = NativeStackScreenProps<SignUpStackParams, 'GeneralInformationScreen'>;
-
-const GeneralInformationScreen: React.FC<GeneralInformationScreenParams> = ({navigation}) => {
+type CodeScreenParams = CompositeScreenProps<NativeStackScreenProps<SignUpStackParams, 'CodeScreen'>, NativeStackScreenProps<SignInStackParams>>;
+const CodeScreen: React.FC<CodeScreenParams> = ({navigation}) => {
 	const dimension = Dimensions.get('window');
 	const floatingContainerRef = useRef<View>(null);
 	const [floatingContainerDimension, setFloatingContainerDimension] = useState({width: 0, height: 0});
-	const [carouselItems, setCarouselItems] = useState([
+	const [carouselItems] = useState([
 		{
 			id: 1,
 			image: require('@/assets/images/auth-slider1.jpeg'),
@@ -33,8 +33,8 @@ const GeneralInformationScreen: React.FC<GeneralInformationScreenParams> = ({nav
 		},
 	]);
 	return (
-		<View style={styles.container}>
-			<View style={{height: dimension.height * 0.4, width: dimension.width, position: 'absolute'}}>
+		<KeyboardAwareScrollView style={styles.container}>
+			<View style={[styles.slider, {height: dimension.height * 0.4, width: dimension.width}]}>
 				<SwiperFlatList
 					disableGesture
 					autoplay
@@ -53,7 +53,7 @@ const GeneralInformationScreen: React.FC<GeneralInformationScreenParams> = ({nav
 					styles.floatingContainer,
 					{
 						width: dimension.width * 0.9,
-						height: dimension.height * 0.6,
+						height: dimension.height * 0.5 + 56,
 						left: dimension.width / 2,
 						top: dimension.height / 2,
 						transform: [
@@ -61,36 +61,29 @@ const GeneralInformationScreen: React.FC<GeneralInformationScreenParams> = ({nav
 								translateX: -(dimension.width * 0.9) / 2,
 							},
 							{
-								translateY: -(dimension.height * 0.6 * 0.7) / 2,
+								translateY: -(dimension.height * 0.3 + 56) / 2,
 							},
 						],
 					},
 				]}>
 				<SidText style={styles.floatingText}>Kayıt Ol</SidText>
-				<SidInput style={styles.input} placeholder="İsim" label={<SidText style={styles.inputLabel}>İsim</SidText>} />
-				<SidInput style={styles.input} placeholder="email@adress.com" label={<SidText style={styles.inputLabel}>Email</SidText>} />
-				<SidInput style={styles.input} placeholder="05534581717" label={<SidText style={styles.inputLabel}>Telefon</SidText>} />
-				<SidInput
-					multiline={false}
-					labelHidden={true}
-					style={styles.inputSmall}
-					placeholder="Arkadaş vasıtasıyla mı geldin? Kodu gir ya da"
-					rightComponent={<SidText style={{color: colors.sidBlueColor, fontFamily: fonts.SemiBold, fontSize: scaledHeight(12)}}>QR Ekle</SidText>}
-				/>
-				<SidCheckbox isActive={true} style={styles.sidCheckBox}>
-					<View style={styles.checkBoxTextContainer}>
-						<TouchableOpacity>
-							<SidText style={styles.linkButton}>Kullanım Şartları</SidText>
-						</TouchableOpacity>
-						<SidText style={styles.defaultText}>'nı ve</SidText>
-						<TouchableOpacity>
-							<SidText style={styles.linkButton}> Gizlilik Politikası</SidText>
-						</TouchableOpacity>
-						<SidText style={styles.defaultText}>'nı okudum, anladım ve kabul ediyorum.</SidText>
-					</View>
-				</SidCheckbox>
+				<SidText style={styles.textBold}>Cep telefonunuza gelen kodu giriniz</SidText>
+				<SidText style={styles.textFirst}>Lütfen mesajlarınızı kontrol edin ve</SidText>
+				<SidText style={styles.textFirst}>
+					<SidText style={{fontFamily: fonts.Bold}}>(+90) 012-345-6789</SidText> numarasına gönderdiğimiz kodu girin.
+				</SidText>
+				<View style={styles.codeInput}>
+					<SidCodeInput containerStyle={{width: scaledWidth(26)}} onComplete={() => {}} />
+				</View>
+				<SidText style={styles.textTwo}>
+					Kodun gelmesi zaman alabilir, eğer hiç kod almadıysanız lütfen
+					<TouchableOpacity>
+						<SidText style={styles.textButton}> Tekrar Kod Gönder </SidText>
+					</TouchableOpacity>
+					’e basın.
+				</SidText>
 				<View style={styles.buttonContainer}>
-					<SidButton style={styles.button} rightIcon={<ArrowRightSvg />} onPress={() => navigation.navigate('CodeScreen')}>
+					<SidButton style={styles.button} rightIcon={<ArrowRightSvg />} onPress={() => navigation.navigate('SignUpSuccessScreen')}>
 						<SidText style={styles.buttonTextStyle}>Devam</SidText>
 					</SidButton>
 				</View>
@@ -115,12 +108,12 @@ const GeneralInformationScreen: React.FC<GeneralInformationScreenParams> = ({nav
 						],
 					},
 				]}>
-				<SidText style={styles.loginText}>Zaten bir hesabın var?</SidText>
-				<TouchableOpacity>
+				<SidText style={styles.loginText}>Zaten bir hesabın var mı?</SidText>
+				<TouchableOpacity onPress={() => navigation.replace('SignInStack')}>
 					<SidText style={styles.loginLinkText}>Giriş yap</SidText>
 				</TouchableOpacity>
 			</View>
-		</View>
+		</KeyboardAwareScrollView>
 	);
 };
 
@@ -129,24 +122,14 @@ const styles = StyleSheet.create({
 		flex: 1,
 		width: '100%',
 	},
+	slider: {
+		position: 'absolute',
+	},
 	floatingContainer: {
 		position: 'absolute',
 		backgroundColor: colors.white,
-		padding: padding[10],
+		padding: padding[5],
 		borderRadius: scaledWidth(36),
-		zIndex: 9999,
-	},
-	inputLabel: {
-		color: colors.black,
-		fontSize: scaledHeight(16),
-		fontFamily: fonts.SemiBold,
-	},
-	input: {
-		marginBottom: scaledHeight(24),
-	},
-	inputSmall: {
-		fontSize: scaledWidth(12),
-		paddingRight: scaledWidth(52),
 	},
 	buttonContainer: {
 		width: '100%',
@@ -173,28 +156,30 @@ const styles = StyleSheet.create({
 		color: colors.white,
 		fontSize: scaledWidth(14),
 	},
-	sidCheckBox: {
-		marginTop: scaledHeight(33),
-	},
-	checkBoxTextContainer: {
-		flexDirection: 'row',
-		flexWrap: 'wrap',
-	},
-	defaultText: {
-		fontSize: scaledWidth(12),
+	textBold: {
+		fontSize: scaledWidth(18),
 		fontFamily: fonts.Bold,
+		marginTop: scaledHeight(24),
 		color: colors.black,
 	},
-	linkButton: {
-		color: colors.sidBlueColor,
-		fontFamily: fonts.Bold,
-		fontSize: scaledWidth(12),
-		textDecorationLine: 'underline',
+	textFirst: {
+		fontSize: scaledWidth(14),
+		color: '#4D4D4D',
+		textAlign: 'center',
 	},
-	textCheckBox: {
-		fontSize: scaledWidth(12),
-		fontFamily: fonts.Light,
-		fontWeight: '500',
+	textTwo: {
+		fontSize: scaledWidth(14),
+		color: '#5C5C5C',
+		textAlign: 'center',
+		marginBottom: scaledHeight(90),
+		fontFamily: fonts.Bold,
+	},
+	textButton: {
+		fontSize: scaledWidth(14),
+		fontFamily: fonts.Bold,
+		color: colors.sidBlueColor,
+		textDecorationLine: 'underline',
+		textAlign: 'center',
 	},
 	floatingLoginContainer: {
 		flexDirection: 'row',
@@ -219,5 +204,9 @@ const styles = StyleSheet.create({
 		fontFamily: fonts.SemiBold,
 		color: colors.white,
 	},
+	codeInput: {
+		flex: 1,
+		paddingHorizontal: scaledWidth(18),
+	},
 });
-export default GeneralInformationScreen;
+export default CodeScreen;

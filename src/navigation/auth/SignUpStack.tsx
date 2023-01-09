@@ -1,7 +1,7 @@
-import ChoosePathCategoryScreen from '@/screens/auth/ChoosePathCategoryScreen';
-import CodeScreen from '@/screens/auth/CodeScreen';
-import GeneralInformationScreen from '@/screens/auth/GeneralInformationScreen';
-import SignUpSuccessScreen from '@/screens/auth/SignUpSuccessScreen';
+import ChoosePathCategoryScreen from '@/screens/auth/signup/ChoosePathCategoryScreen';
+import CodeScreen from '@/screens/auth/signup/CodeScreen';
+import GeneralInformationScreen from '@/screens/auth/signup/GeneralInformationScreen';
+import SignUpSuccessScreen from '@/screens/auth/signup/SignUpSuccessScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 

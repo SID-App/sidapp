@@ -2,22 +2,53 @@ import ArrowRightSvg from '@/assets/svg/ArrowRightSvg';
 import SidButton from '@/components/SidButton';
 import SidCodeInput from '@/components/SidCodeInput';
 import SidText from '@/components/SidText';
-import {SignUpStackParams} from '@/navigation/auth/SignUpStack';
+import {SignInStackParams} from '@/navigation/auth/SignInStack';
+import {HomeStackParams} from '@/navigation/home/HomeStack';
 import {colors, fonts, padding} from '@/theme';
 import {scaledHeight, scaledWidth} from '@/utils/responsive';
+import {CompositeScreenProps} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {Dimensions, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import SwiperFlatList from 'react-native-swiper-flatlist';
 
-type CodeScreenParams = NativeStackScreenProps<SignUpStackParams, 'CodeScreen'>;
+type LogInCodeScreenParams = CompositeScreenProps<
+	NativeStackScreenProps<SignInStackParams, 'LogInCodeScreen'>,
+	NativeStackScreenProps<HomeStackParams>
+>;
 
-const CodeScreen: React.FC<CodeScreenParams> = ({navigation}) => {
+const LogInCodeScreen: React.FC<LogInCodeScreenParams> = ({navigation}) => {
 	const dimension = Dimensions.get('window');
-	const floatingContainerRef = useRef<View>(null);
-	const [floatingContainerDimension, setFloatingContainerDimension] = useState({width: 0, height: 0});
+	const [carouselItems] = useState([
+		{
+			id: 1,
+			image: require('@/assets/images/auth-slider1.jpeg'),
+		},
+		{
+			id: 2,
+			image: require('@/assets/images/auth-slider2.jpeg'),
+		},
+		{
+			id: 3,
+			image: require('@/assets/images/auth-slider3.jpeg'),
+		},
+	]);
 	return (
 		<KeyboardAwareScrollView style={styles.container}>
+			<View style={[styles.slider, {height: dimension.height * 0.4, width: dimension.width}]}>
+				<SwiperFlatList
+					disableGesture
+					autoplay
+					autoplayDelay={2}
+					autoplayLoop
+					autoplayLoopKeepAnimation
+					index={0}
+					showPagination={false}
+					data={carouselItems}
+					renderItem={({item}) => <Image source={item.image} style={{height: dimension.height * 0.4, width: dimension.width}} />}
+				/>
+			</View>
 			<Image source={require('@/assets/images/authbg.png')} style={{height: dimension.height, width: dimension.width}} resizeMode="stretch" />
 			<View
 				style={[
@@ -37,7 +68,7 @@ const CodeScreen: React.FC<CodeScreenParams> = ({navigation}) => {
 						],
 					},
 				]}>
-				<SidText style={styles.floatingText}>Kayıt Ol</SidText>
+				<SidText style={styles.floatingText}>Giriş Yap</SidText>
 				<SidText style={styles.textBold}>Cep telefonunuza gelen kodu giriniz</SidText>
 				<SidText style={styles.textFirst}>Lütfen mesajlarınızı kontrol edin ve</SidText>
 				<SidText style={styles.textFirst}>
@@ -54,35 +85,10 @@ const CodeScreen: React.FC<CodeScreenParams> = ({navigation}) => {
 					’e basın.
 				</SidText>
 				<View style={styles.buttonContainer}>
-					<SidButton style={styles.button} rightIcon={<ArrowRightSvg />} onPress={() => navigation.navigate('SignUpSuccessScreen')}>
+					<SidButton style={styles.button} rightIcon={<ArrowRightSvg />} onPress={() => navigation.navigate('HomeStack')}>
 						<SidText style={styles.buttonTextStyle}>Devam</SidText>
 					</SidButton>
 				</View>
-			</View>
-			<View
-				ref={floatingContainerRef}
-				onLayout={event => {
-					setFloatingContainerDimension({
-						width: event.nativeEvent.layout.width,
-						height: event.nativeEvent.layout.height,
-					});
-				}}
-				style={[
-					styles.floatingLoginContainer,
-					{
-						bottom: dimension.height * 0.05,
-						left: dimension.width / 2,
-						transform: [
-							{
-								translateX: -floatingContainerDimension.width / 2,
-							},
-						],
-					},
-				]}>
-				<SidText style={styles.loginText}>Zaten bir hesabın var mı?</SidText>
-				<TouchableOpacity>
-					<SidText style={styles.loginLinkText}>Giriş yap</SidText>
-				</TouchableOpacity>
 			</View>
 		</KeyboardAwareScrollView>
 	);
@@ -92,6 +98,9 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		width: '100%',
+	},
+	slider: {
+		position: 'absolute',
 	},
 	floatingContainer: {
 		position: 'absolute',
@@ -149,32 +158,17 @@ const styles = StyleSheet.create({
 		textDecorationLine: 'underline',
 		textAlign: 'center',
 	},
-	floatingLoginContainer: {
-		flexDirection: 'row',
-		position: 'absolute',
-	},
-	loginText: {
-		fontSize: scaledWidth(14),
-		fontFamily: fonts.SemiBold,
-		color: colors.white,
-		marginRight: scaledWidth(4),
-	},
-	loginLinkText: {
-		fontSize: scaledWidth(14),
-		fontFamily: fonts.Bold,
-		color: colors.white,
-	},
 	floatingText: {
 		top: -100,
 		left: 0,
 		position: 'absolute',
 		fontSize: scaledWidth(54),
 		fontFamily: fonts.SemiBold,
-		color: colors.black,
+		color: colors.white,
 	},
 	codeInput: {
 		flex: 1,
 		paddingHorizontal: scaledWidth(18),
 	},
 });
-export default CodeScreen;
+export default LogInCodeScreen;
