@@ -7,8 +7,8 @@ import {scaledHeight, scaledWidth} from '@/utils/responsive';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useRef, useState} from 'react';
 import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
-import PetChoose from '../components/PetChoose';
-import SidBarNav from '../components/SidBarNav';
+import PetChoose from './components/PetChoose';
+import SidBarNav from './components/SidBarNav';
 
 type ChoosePathCategoryScreenProps = NativeStackScreenProps<SignUpStackParams, 'ChoosePathCategoryScreen'>;
 const ChoosePathCategoryScreen: React.FC<ChoosePathCategoryScreenProps> = ({navigation}) => {

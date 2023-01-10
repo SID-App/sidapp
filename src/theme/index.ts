@@ -26,6 +26,8 @@ const colors = {
 	sidBlueDarkenColor: '#58215E',
 	sidActiveBarColor: 'rgba(255, 255, 255, 1)',
 	sidPassiveBarColor: 'rgba(255, 163, 141, 1)',
+	errorBorderColor: '#FF0000',
+	errorTextColor: '#FF0000',
 };
 const fonts = {
 	Black: 'NunitoSans-Black',

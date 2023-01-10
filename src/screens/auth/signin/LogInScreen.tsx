@@ -53,7 +53,7 @@ const LogInScreen: React.FC<LogInScreenParams> = ({navigation}) => {
 					styles.floatingContainer,
 					{
 						width: dimension.width * 0.9,
-						height: dimension.height * 0.22,
+						height: scaledHeight(168),
 						left: dimension.width / 2,
 						top: dimension.height / 2,
 						transform: [
@@ -61,7 +61,7 @@ const LogInScreen: React.FC<LogInScreenParams> = ({navigation}) => {
 								translateX: -(dimension.width * 0.9) / 2,
 							},
 							{
-								translateY: (dimension.height * 0.01) / 9,
+								translateY: dimension.height / 2 - 412,
 							},
 						],
 					},

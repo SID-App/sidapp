@@ -3,29 +3,105 @@ import IconHomeInstgramSvgVectorDown from '@/assets/svg/IconHomeInstgramSvgVecto
 import IconMenuInstgramSvg from '@/assets/svg/IconMenuInstgramSvg';
 import SidText from '@/components/SidText';
 import {colors, padding} from '@/theme';
-import {scaledWidth} from '@/utils/responsive';
+import {scaledHeight, scaledWidth} from '@/utils/responsive';
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Animated, Image, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {HistoryHelper} from '../helpers/HistoryHelper';
+import {TextHelper} from '../helpers/TextHelper';
+import {HistoryData} from '../store/HistoryData';
+import {IHistory} from '../types/HistoryTypes';
+import DrawerTab from './DrawerTab';
+import {PostCard} from './PostCard';
 
 type InstgramHomeHeaderBarParams = {};
 
 const InstgramHomeHeaderBar: React.FC<InstgramHomeHeaderBarParams> = () => {
+	const [showMenu, setShowMenu] = React.useState(false);
+	const offsetValue = React.useRef(new Animated.Value(0)).current;
+	const scaleValue = React.useRef(new Animated.Value(1)).current;
+	const closeButtonOffset = React.useRef(new Animated.Value(0)).current;
 	return (
-		<View style={styles.container}>
-			<TouchableOpacity>
-				<IconMenuInstgramSvg />
-			</TouchableOpacity>
-			<View style={styles.topBarVectorText}>
-				<SidText style={styles.topBarText}>Önerilen</SidText>
-				<TouchableOpacity>
-					<IconHomeInstgramSvgVectorDown />
-				</TouchableOpacity>
-			</View>
-			<TouchableOpacity style={styles.headerIconTopRing}>
-				<SidText style={styles.headerTextTopRing}>3</SidText>
-				<IconHomeInstgramSvgTopRing />
-			</TouchableOpacity>
-		</View>
+		<>
+			<DrawerTab />
+			<Animated.View
+				style={[
+					styles.animatedOne,
+					{
+						borderLeftWidth: showMenu ? 40 : 0,
+						borderTopWidth: showMenu ? 70 : 0,
+						borderBottomWidth: showMenu ? 100 : 0,
+						borderColor: showMenu ? '#9FE2BF' : colors.sidBlueColor,
+						height: showMenu ? '100%' : '100%',
+						borderRadius: showMenu ? 48 : 0,
+						transform: [{scale: scaleValue}, {translateX: offsetValue}],
+					},
+				]}>
+				<Animated.View
+					style={{
+						transform: [
+							{
+								translateY: closeButtonOffset,
+							},
+						],
+					}}>
+					<View style={styles.container}>
+						<TouchableOpacity
+							onPress={() => {
+								Animated.timing(scaleValue, {
+									toValue: showMenu ? 1 : 0.5,
+									duration: 300,
+									useNativeDriver: true,
+								}).start();
+								Animated.timing(offsetValue, {
+									// YOur Random Value...
+									toValue: showMenu ? 0 : 280,
+									duration: 300,
+									useNativeDriver: true,
+								}).start();
+								Animated.timing(closeButtonOffset, {
+									// YOur Random Value...
+									toValue: !showMenu ? -30 : 0,
+									duration: 300,
+									useNativeDriver: true,
+								}).start();
+								setShowMenu(!showMenu);
+							}}>
+							<IconMenuInstgramSvg />
+						</TouchableOpacity>
+						<View style={styles.topBarVectorText}>
+							<SidText style={styles.topBarText}>Önerilen</SidText>
+							<TouchableOpacity>
+								<IconHomeInstgramSvgVectorDown />
+							</TouchableOpacity>
+						</View>
+						<TouchableOpacity style={styles.headerIconTopRing}>
+							<SidText style={styles.headerTextTopRing}>3</SidText>
+							<IconHomeInstgramSvgTopRing />
+						</TouchableOpacity>
+					</View>
+					<ScrollView>
+						<ScrollView style={styles.historyItem} horizontal={true} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
+							{HistoryHelper.getHistory(HistoryData).map((item: IHistory) => (
+								<View key={item.id}>
+									<TouchableOpacity style={[styles.historyItemContainer]}>
+										<Image
+											style={[styles.history, item.active ? styles.historyActive : styles.historyNotActive]}
+											source={{
+												uri: item.avatar,
+											}}
+										/>
+										<SidText style={styles.historyName}>{TextHelper.getUserHistoryName(item.name)}</SidText>
+									</TouchableOpacity>
+								</View>
+							))}
+						</ScrollView>
+						{HistoryData.map(item => (
+							<PostCard name={item.name} source={item.avatar} />
+						))}
+					</ScrollView>
+				</Animated.View>
+			</Animated.View>
+		</>
 	);
 };
 
@@ -46,7 +122,7 @@ const styles = StyleSheet.create({
 	topBarText: {
 		fontSize: scaledWidth(20),
 		color: colors.white,
-		padding: padding[1],
+		paddingRight: padding[1],
 	},
 	headerIconTopRing: {
 		position: 'relative',
@@ -61,6 +137,43 @@ const styles = StyleSheet.create({
 		borderRadius: scaledWidth(10),
 		zIndex: 1,
 		overflow: 'hidden',
+	},
+	animatedOne: {
+		flex: 1,
+		backgroundColor: 'rgba(249, 249, 249, 1)',
+		position: 'absolute',
+		top: 0,
+		bottom: 0,
+		left: 0,
+		right: 0,
+	},
+	historyItem: {
+		height: scaledHeight(100),
+		marginTop: scaledHeight(1),
+		backgroundColor: 'white',
+	},
+	historyItemContainer: {
+		paddingRight: 16,
+		marginLeft: 8,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	historyActive: {
+		borderColor: colors.sidBlueColor,
+	},
+	historyNotActive: {
+		borderColor: colors.white,
+	},
+	history: {
+		marginTop: scaledHeight(10),
+		height: scaledHeight(60),
+		width: scaledWidth(60),
+		borderRadius: scaledWidth(30),
+		borderWidth: 4,
+	},
+	historyName: {
+		color: colors.black,
+		alignItems: 'center',
 	},
 });
 

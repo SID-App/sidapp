@@ -3,7 +3,7 @@ import React from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {SignUpStackParams} from '@/navigation/auth/SignUpStack';
-import SidBarNav from '../components/SidBarNav';
+import SidBarNav from './components/SidBarNav';
 import {scaledHeight, scaledWidth} from '@/utils/responsive';
 import SidButton from '@/components/SidButton';
 import SidText from '@/components/SidText';

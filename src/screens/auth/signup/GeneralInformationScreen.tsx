@@ -5,13 +5,16 @@ import SidInput from '@/components/SidInput';
 import SidText from '@/components/SidText';
 import {SignInStackParams} from '@/navigation/auth/SignInStack';
 import {SignUpStackParams} from '@/navigation/auth/SignUpStack';
+import {SignUpFormType} from '@/redux/auth/signUpSlce';
 import {colors, fonts, padding} from '@/theme';
 import {scaledHeight, scaledWidth} from '@/utils/responsive';
 import {CompositeScreenProps} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useFormik} from 'formik';
 import React, {useRef, useState} from 'react';
 import {Dimensions, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import SwiperFlatList from 'react-native-swiper-flatlist';
+import * as yup from 'yup';
 
 type GeneralInformationScreenParams = CompositeScreenProps<
 	NativeStackScreenProps<SignUpStackParams, 'GeneralInformationScreen'>,
@@ -36,6 +39,19 @@ const GeneralInformationScreen: React.FC<GeneralInformationScreenParams> = ({nav
 			image: require('@/assets/images/auth-slider3.jpeg'),
 		},
 	]);
+	const signUpForm = useFormik<SignUpFormType>({
+		initialValues: {
+			name: '',
+			email: '',
+			phone: '',
+			isconfirmed: false,
+		},
+		onSubmit: () => {},
+		validationSchema: yup.object({
+			name: yup.string().required('isim alanı zorunludur'),
+			email: yup.string().required('email alanı zorunludur').email('email formatı geçersiz'),
+		}),
+	});
 	return (
 		<View style={styles.container}>
 			<View style={[styles.slider, {height: dimension.height * 0.4, width: dimension.width}]}>
@@ -57,7 +73,7 @@ const GeneralInformationScreen: React.FC<GeneralInformationScreenParams> = ({nav
 					styles.floatingContainer,
 					{
 						width: dimension.width * 0.9,
-						height: dimension.height * 0.6,
+						height: dimension.height * 0.61,
 						left: dimension.width / 2,
 						top: dimension.height / 2,
 						transform: [
@@ -71,13 +87,30 @@ const GeneralInformationScreen: React.FC<GeneralInformationScreenParams> = ({nav
 					},
 				]}>
 				<SidText style={styles.floatingText}>Kayıt Ol</SidText>
-				<SidInput style={styles.input} placeholder="İsim" label={<SidText style={styles.inputLabel}>İsim</SidText>} />
-				<SidInput style={styles.input} placeholder="email@adress.com" label={<SidText style={styles.inputLabel}>Email</SidText>} />
-				<SidInput style={styles.input} placeholder="05534581717" label={<SidText style={styles.inputLabel}>Telefon</SidText>} />
+				<SidInput
+					onChangeText={signUpForm.handleChange('name')}
+					onBlur={signUpForm.handleBlur('name')}
+					value={signUpForm.values.name}
+					containerStyle={styles.input}
+					placeholder="İsim"
+					label={<SidText style={styles.inputLabel}>İsim</SidText>}
+					error={signUpForm.errors.name}
+				/>
+				<SidInput
+					onChangeText={signUpForm.handleChange('email')}
+					onBlur={signUpForm.handleBlur('email')}
+					value={signUpForm.values.email}
+					containerStyle={styles.input}
+					placeholder="email@adress.com"
+					label={<SidText style={styles.inputLabel}>Email</SidText>}
+					error={signUpForm.errors.email}
+				/>
+
+				<SidInput containerStyle={styles.input} placeholder="05534581717" label={<SidText style={styles.inputLabel}>Telefon</SidText>} />
 				<SidInput
 					multiline={false}
 					labelHidden={true}
-					style={styles.inputSmall}
+					containerStyle={styles.inputSmall}
 					placeholder="Arkadaş vasıtasıyla mı geldin? Kodu gir ya da"
 					rightComponent={<SidText style={{color: colors.sidBlueColor, fontFamily: fonts.SemiBold, fontSize: scaledHeight(12)}}>QR Ekle</SidText>}
 				/>

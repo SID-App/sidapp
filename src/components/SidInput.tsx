@@ -1,11 +1,14 @@
 import {colors, fonts, padding} from '@/theme';
-import {scaledHeight} from '@/utils/responsive';
+import {scaledHeight, scaledWidth} from '@/utils/responsive';
 import React, {forwardRef, useState} from 'react';
 import {StyleSheet, TextInput, TextInputProps, View} from 'react-native';
+import SidText from './SidText';
 type SidInputProps = {
 	label?: React.ReactNode | React.ReactNode[];
 	labelHidden?: boolean;
 	rightComponent?: React.ReactNode;
+	error?: string | boolean;
+	containerStyle?: any;
 } & TextInputProps;
 
 const SidInput = forwardRef((props: SidInputProps, ref: any) => {
@@ -20,7 +23,7 @@ const SidInput = forwardRef((props: SidInputProps, ref: any) => {
 	const {labelHidden = false} = props;
 	return (
 		<View
-			style={styles.compStyle}
+			style={[styles.compStyle, props.containerStyle]}
 			onLayout={event => {
 				const {width, height} = event.nativeEvent.layout;
 				setSize({
@@ -32,10 +35,18 @@ const SidInput = forwardRef((props: SidInputProps, ref: any) => {
 			<TextInput
 				ref={ref}
 				{...props}
-				style={[styles.textInput, props.style]}
+				style={[
+					styles.textInput,
+					props.style,
+					{
+						borderBottomColor: props.error ? colors.errorBorderColor : colors.borderColor,
+						marginBottom: props.error ? scaledHeight(4) : scaledHeight(0),
+					},
+				]}
 				allowFontScaling={false}
 				placeholderTextColor={colors.textPlaceHolderColor}
 			/>
+			{props.error && <SidText style={styles.errorText}>{props.error}</SidText>}
 			{props.rightComponent && (
 				<View
 					style={[
@@ -78,6 +89,10 @@ const styles = StyleSheet.create({
 	},
 	compStyle: {
 		position: 'relative',
+	},
+	errorText: {
+		fontSize: scaledWidth(12),
+		color: colors.errorTextColor,
 	},
 });
 export default SidInput;
