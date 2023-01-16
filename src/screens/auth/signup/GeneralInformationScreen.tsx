@@ -5,7 +5,8 @@ import SidInput from '@/components/SidInput';
 import SidText from '@/components/SidText';
 import {SignInStackParams} from '@/navigation/auth/SignInStack';
 import {SignUpStackParams} from '@/navigation/auth/SignUpStack';
-import {SignUpFormType} from '@/redux/auth/signUpSlce';
+import {setSingUpValues, SignUpFormType} from '@/redux/auth/signUpSlice';
+import {useAppDispatch} from '@/redux/hooks';
 import {colors, fonts, padding} from '@/theme';
 import {scaledHeight, scaledWidth} from '@/utils/responsive';
 import {CompositeScreenProps} from '@react-navigation/native';
@@ -25,6 +26,8 @@ const GeneralInformationScreen: React.FC<GeneralInformationScreenParams> = ({nav
 	const dimension = Dimensions.get('window');
 	const floatingContainerRef = useRef<View>(null);
 	const [floatingContainerDimension, setFloatingContainerDimension] = useState({width: 0, height: 0});
+	const dispatch = useAppDispatch();
+
 	const [carouselItems] = useState([
 		{
 			id: 1,
@@ -44,14 +47,19 @@ const GeneralInformationScreen: React.FC<GeneralInformationScreenParams> = ({nav
 			name: '',
 			email: '',
 			phone: '',
-			isconfirmed: false,
+			isConfirmed: false,
 		},
-		onSubmit: () => {},
+		onSubmit: values => {
+			dispatch(setSingUpValues(values));
+			navigation.navigate('CodeScreen');
+		},
 		validationSchema: yup.object({
 			name: yup.string().required('isim alanı zorunludur'),
 			email: yup.string().required('email alanı zorunludur').email('email formatı geçersiz'),
+			phone: yup.string().required('telefon alanı zorunludur'),
 		}),
 	});
+
 	return (
 		<View style={styles.container}>
 			<View style={[styles.slider, {height: dimension.height * 0.4, width: dimension.width}]}>
@@ -106,7 +114,15 @@ const GeneralInformationScreen: React.FC<GeneralInformationScreenParams> = ({nav
 					error={signUpForm.errors.email}
 				/>
 
-				<SidInput containerStyle={styles.input} placeholder="05534581717" label={<SidText style={styles.inputLabel}>Telefon</SidText>} />
+				<SidInput
+					onChangeText={signUpForm.handleChange('phone')}
+					onBlur={signUpForm.handleBlur('phone')}
+					value={signUpForm.values.phone}
+					error={signUpForm.errors.phone}
+					containerStyle={styles.input}
+					placeholder="05534581717"
+					label={<SidText style={styles.inputLabel}>Telefon</SidText>}
+				/>
 				<SidInput
 					multiline={false}
 					labelHidden={true}
@@ -127,7 +143,7 @@ const GeneralInformationScreen: React.FC<GeneralInformationScreenParams> = ({nav
 					</View>
 				</SidCheckbox>
 				<View style={styles.buttonContainer}>
-					<SidButton style={styles.button} rightIcon={<ArrowRightSvg />} onPress={() => navigation.navigate('CodeScreen')}>
+					<SidButton style={styles.button} rightIcon={<ArrowRightSvg />} onPress={() => signUpForm.handleSubmit()}>
 						<SidText style={styles.buttonTextStyle}>Devam</SidText>
 					</SidButton>
 				</View>

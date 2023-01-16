@@ -2,8 +2,8 @@ import ArrowRightSvg from '@/assets/svg/ArrowRightSvg';
 import SidButton from '@/components/SidButton';
 import SidCodeInput from '@/components/SidCodeInput';
 import SidText from '@/components/SidText';
+import {AppStackNavigatorParams} from '@/navigation/app/AppStack';
 import {SignInStackParams} from '@/navigation/auth/SignInStack';
-import {HomeStackParams} from '@/navigation/home/HomeStack';
 import {colors, fonts, padding} from '@/theme';
 import {scaledHeight, scaledWidth} from '@/utils/responsive';
 import {CompositeScreenProps} from '@react-navigation/native';
@@ -15,7 +15,7 @@ import SwiperFlatList from 'react-native-swiper-flatlist';
 
 type LogInCodeScreenParams = CompositeScreenProps<
 	NativeStackScreenProps<SignInStackParams, 'LogInCodeScreen'>,
-	NativeStackScreenProps<HomeStackParams>
+	NativeStackScreenProps<AppStackNavigatorParams>
 >;
 
 const LogInCodeScreen: React.FC<LogInCodeScreenParams> = ({navigation}) => {
@@ -85,7 +85,7 @@ const LogInCodeScreen: React.FC<LogInCodeScreenParams> = ({navigation}) => {
 					’e basın.
 				</SidText>
 				<View style={styles.buttonContainer}>
-					<SidButton style={styles.button} rightIcon={<ArrowRightSvg />} onPress={() => navigation.navigate('HomeStack')}>
+					<SidButton style={styles.button} rightIcon={<ArrowRightSvg />} onPress={() => navigation.navigate('AppStack')}>
 						<SidText style={styles.buttonTextStyle}>Devam</SidText>
 					</SidButton>
 				</View>

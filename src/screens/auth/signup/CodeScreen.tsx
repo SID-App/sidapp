@@ -4,12 +4,13 @@ import SidCodeInput from '@/components/SidCodeInput';
 import SidText from '@/components/SidText';
 import {SignInStackParams} from '@/navigation/auth/SignInStack';
 import {SignUpStackParams} from '@/navigation/auth/SignUpStack';
+import {useAppSelector} from '@/redux/hooks';
 import {colors, fonts, padding} from '@/theme';
 import {scaledHeight, scaledWidth} from '@/utils/responsive';
 import {CompositeScreenProps} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useRef, useState} from 'react';
-import {Dimensions, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {Alert, Dimensions, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 
@@ -18,6 +19,7 @@ const CodeScreen: React.FC<CodeScreenParams> = ({navigation}) => {
 	const dimension = Dimensions.get('window');
 	const floatingContainerRef = useRef<View>(null);
 	const [floatingContainerDimension, setFloatingContainerDimension] = useState({width: 0, height: 0});
+	const signUpSelector = useAppSelector(state => state.signUpSlice);
 	const [carouselItems] = useState([
 		{
 			id: 1,
@@ -32,6 +34,9 @@ const CodeScreen: React.FC<CodeScreenParams> = ({navigation}) => {
 			image: require('@/assets/images/auth-slider3.jpeg'),
 		},
 	]);
+	useEffect(() => {
+		Alert.alert(signUpSelector.phone ?? '');
+	});
 	return (
 		<KeyboardAwareScrollView style={styles.container}>
 			<View style={[styles.slider, {height: dimension.height * 0.4, width: dimension.width}]}>

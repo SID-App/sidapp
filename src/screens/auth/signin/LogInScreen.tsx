@@ -8,6 +8,7 @@ import {scaledHeight, scaledWidth} from '@/utils/responsive';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import {Dimensions, Image, StyleSheet, View} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 
 type LogInScreenParams = NativeStackScreenProps<SignInStackParams, 'LogInScreen'>;
@@ -29,7 +30,7 @@ const LogInScreen: React.FC<LogInScreenParams> = ({navigation}) => {
 		},
 	]);
 	return (
-		<View style={styles.container}>
+		<KeyboardAwareScrollView style={styles.container}>
 			<View style={[styles.slider, {height: dimension.height * 0.9, width: dimension.width}]}>
 				<SwiperFlatList
 					disableGesture
@@ -68,14 +69,19 @@ const LogInScreen: React.FC<LogInScreenParams> = ({navigation}) => {
 				]}>
 				<SidText style={styles.floatingText}>Hoş Geldin</SidText>
 				<SidText style={styles.floatingTextTwo}>Giriş Yap </SidText>
-				<SidInput style={styles.input} placeholder="05534581717" label={<SidText style={styles.inputLabel}>Telefon numaranı gir</SidText>} />
+				<SidInput
+					style={styles.input}
+					keyboardType="number-pad"
+					placeholder="05534581717"
+					label={<SidText style={styles.inputLabel}>Telefon numaranı gir</SidText>}
+				/>
 				<View style={styles.buttonContainer}>
 					<SidButton style={styles.button} rightIcon={<ArrowRightSvg />} onPress={() => navigation.navigate('LogInCodeScreen')}>
 						<SidText style={styles.buttonTextStyle}>Devam</SidText>
 					</SidButton>
 				</View>
 			</View>
-		</View>
+		</KeyboardAwareScrollView>
 	);
 };
 

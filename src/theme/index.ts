@@ -28,6 +28,9 @@ const colors = {
 	sidPassiveBarColor: 'rgba(255, 163, 141, 1)',
 	errorBorderColor: '#FF0000',
 	errorTextColor: '#FF0000',
+	sidMessageTimeReadColor: 'rgba(101, 202, 160, 1)',
+	sidMessageTimeUnReadColor: 'rgba(147, 147, 147, 1)',
+	sidMessageDetailBackGroundColor: '#EDEDEE',
 };
 const fonts = {
 	Black: 'NunitoSans-Black',

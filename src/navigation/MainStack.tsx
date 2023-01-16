@@ -3,24 +3,24 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import OnboardingStack, {OnboardingStackNavigatorParams} from './onboarding/OnboardingStack';
 import SignUpStack from './auth/SignUpStack';
 import SignInStack, {SignInStackParams} from './auth/SignInStack';
-import HomeStack from './home/HomeStack';
-export type AppStackNavigatorParams = {
+import AppStack, {AppStackNavigatorParams} from './app/AppStack';
+export type MainStackNavigatorParams = {
 	OnboardingStack: OnboardingStackNavigatorParams;
 	AuthStack: undefined;
 	SignInStack: SignInStackParams;
-	HomeStack: undefined;
+	AppStack: AppStackNavigatorParams;
 };
 
-const AppStackNavigator = createNativeStackNavigator<AppStackNavigatorParams>();
+const MainStackNavigator = createNativeStackNavigator<MainStackNavigatorParams>();
 
 const MainStack = () => {
 	return (
-		<AppStackNavigator.Navigator initialRouteName="AuthStack" screenOptions={{headerShown: false}}>
-			<AppStackNavigator.Screen name="OnboardingStack" component={OnboardingStack} />
-			<AppStackNavigator.Screen name="AuthStack" component={SignUpStack} />
-			<AppStackNavigator.Screen name="SignInStack" component={SignInStack} />
-			<AppStackNavigator.Screen name="HomeStack" component={HomeStack} />
-		</AppStackNavigator.Navigator>
+		<MainStackNavigator.Navigator initialRouteName="AuthStack" screenOptions={{headerShown: false}}>
+			<MainStackNavigator.Screen name="OnboardingStack" component={OnboardingStack} />
+			<MainStackNavigator.Screen name="AuthStack" component={SignUpStack} />
+			<MainStackNavigator.Screen name="SignInStack" component={SignInStack} />
+			<MainStackNavigator.Screen name="AppStack" component={AppStack} />
+		</MainStackNavigator.Navigator>
 	);
 };
 export default MainStack;

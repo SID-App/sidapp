@@ -4,14 +4,15 @@ import IconMenuInstgramSvg from '@/assets/svg/IconMenuInstgramSvg';
 import SidText from '@/components/SidText';
 import {colors, padding} from '@/theme';
 import {scaledHeight, scaledWidth} from '@/utils/responsive';
-import React from 'react';
+import React, {useState} from 'react';
 import {Animated, Image, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {HistoryHelper} from '../helpers/HistoryHelper';
 import {TextHelper} from '../helpers/TextHelper';
 import {HistoryData} from '../store/HistoryData';
-import {IHistory} from '../types/HistoryTypes';
+import {HistoryDataType} from '../types/HistoryTypes';
 import DrawerTab from './DrawerTab';
 import {PostCard} from './PostCard';
+import TopSheetModal from './TopSheetModal';
 
 type InstgramHomeHeaderBarParams = {};
 
@@ -20,6 +21,11 @@ const InstgramHomeHeaderBar: React.FC<InstgramHomeHeaderBarParams> = () => {
 	const offsetValue = React.useRef(new Animated.Value(0)).current;
 	const scaleValue = React.useRef(new Animated.Value(1)).current;
 	const closeButtonOffset = React.useRef(new Animated.Value(0)).current;
+	const [isOpened, setIsOpened] = useState(false);
+	const [sheetPosition, setSheetPosition] = useState({
+		x: 0,
+		y: 0,
+	});
 	return (
 		<>
 			<DrawerTab />
@@ -68,9 +74,16 @@ const InstgramHomeHeaderBar: React.FC<InstgramHomeHeaderBarParams> = () => {
 							}}>
 							<IconMenuInstgramSvg />
 						</TouchableOpacity>
-						<View style={styles.topBarVectorText}>
-							<SidText style={styles.topBarText}>Önerilen</SidText>
-							<TouchableOpacity>
+						<View
+							style={styles.topBarVectorText}
+							onLayout={event =>
+								setSheetPosition({
+									x: event.nativeEvent.layout.x,
+									y: event.nativeEvent.layout.y,
+								})
+							}>
+							<TouchableOpacity style={styles.topBarVectorText} onPressIn={() => setIsOpened(!isOpened)}>
+								<SidText style={styles.topBarText}>Önerilen</SidText>
 								<IconHomeInstgramSvgVectorDown />
 							</TouchableOpacity>
 						</View>
@@ -79,9 +92,10 @@ const InstgramHomeHeaderBar: React.FC<InstgramHomeHeaderBarParams> = () => {
 							<IconHomeInstgramSvgTopRing />
 						</TouchableOpacity>
 					</View>
-					<ScrollView>
+					{isOpened && <TopSheetModal sheetPosition={sheetPosition} />}
+					<ScrollView style={styles.scrollContainer}>
 						<ScrollView style={styles.historyItem} horizontal={true} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
-							{HistoryHelper.getHistory(HistoryData).map((item: IHistory) => (
+							{HistoryHelper.getHistory(HistoryData).map((item: HistoryDataType) => (
 								<View key={item.id}>
 									<TouchableOpacity style={[styles.historyItemContainer]}>
 										<Image
@@ -114,6 +128,9 @@ const styles = StyleSheet.create({
 		paddingHorizontal: padding[5],
 		paddingTop: padding[10],
 		paddingBottom: padding[3],
+	},
+	scrollContainer: {
+		marginBottom: scaledHeight(170),
 	},
 	topBarVectorText: {
 		flexDirection: 'row',
@@ -151,6 +168,7 @@ const styles = StyleSheet.create({
 		height: scaledHeight(100),
 		marginTop: scaledHeight(1),
 		backgroundColor: 'white',
+		zIndex: 1,
 	},
 	historyItemContainer: {
 		paddingRight: 16,
