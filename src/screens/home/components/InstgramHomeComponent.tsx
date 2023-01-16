@@ -110,7 +110,7 @@ const InstgramHomeHeaderBar: React.FC<InstgramHomeHeaderBarParams> = () => {
 							))}
 						</ScrollView>
 						{HistoryData.map(item => (
-							<PostCard name={item.name} source={item.avatar} />
+							<PostCard key={item.id} name={item.name} source={item.avatar} />
 						))}
 					</ScrollView>
 				</Animated.View>

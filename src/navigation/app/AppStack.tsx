@@ -13,6 +13,8 @@ import IconSvgBottomMessage from '@/assets/svg/BottomTab/IconSvgBottomMessage';
 import MessageStack from '../message/MessageStack';
 import SignUpStack from '../auth/SignUpStack';
 import BottomSheetModal from '@/components/BottomSheetModal';
+import {useAppSelector} from '@/redux/hooks';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
 export type AppStackNavigatorParams = {
 	HomeStack: undefined;
@@ -37,6 +39,7 @@ const AppStack = () => {
 		);
 	};
 
+	const globalSelector = useAppSelector(state => state.globalSlice);
 	return (
 		<AppStackNavigator.Navigator
 			screenOptions={{
@@ -44,10 +47,7 @@ const AppStack = () => {
 				tabBarShowLabel: false,
 				tabBarStyle: {
 					backgroundColor: colors.sidOrangeColor,
-					position: 'absolute',
-					height: scaledHeight(84),
 					width: '100%',
-					paddingTop: scaledHeight(15),
 				},
 			}}
 			initialRouteName="HomeStack">
@@ -101,7 +101,19 @@ const AppStack = () => {
 			<AppStackNavigator.Screen
 				name="MessageStack"
 				component={MessageStack}
-				options={{
+				options={({route}) => ({
+					tabBarStyle: (route => {
+						const routeName = getFocusedRouteNameFromRoute(route) ?? '';
+						if (routeName === 'MessageDetailScreen') {
+							return {
+								zIndex: -1,
+								position: 'absolute',
+								bottom: -500,
+								backfaceVisibility: 'hidden',
+							};
+						}
+						return {width: '100%', backgroundColor: colors.sidOrangeColor};
+					})(route),
 					tabBarIcon: ({focused}) => {
 						return focused ? (
 							<View>
@@ -116,7 +128,7 @@ const AppStack = () => {
 							</View>
 						);
 					},
-				}}
+				})}
 			/>
 			<AppStackNavigator.Screen
 				name="SignUpStack"

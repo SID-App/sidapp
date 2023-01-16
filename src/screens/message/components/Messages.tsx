@@ -14,6 +14,9 @@ import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {MessageStackParams} from '@/navigation/message/MessageStack';
+import {useAppDispatch} from '@/redux/hooks';
+import {setCurrentRoute} from '@/redux/global/globalSlice';
+
 type MessagesProps = {
 	ischeckdelete: boolean;
 	navigation: NativeStackNavigationProp<MessageStackParams, 'MessageScreen'>;
@@ -41,7 +44,7 @@ const Messages: React.FC<MessagesProps> = props => {
 	};
 	const [currentIndex, setCurrentIndex] = useState(-1);
 	const [currentDirection, setCurrentDirection] = useState('none');
-
+	const dispatch = useAppDispatch();
 	return (
 		<FlatList
 			data={HistoryData}
@@ -62,7 +65,10 @@ const Messages: React.FC<MessagesProps> = props => {
 							renderRightActions={rightSwipe}
 							renderLeftActions={leftSwipe}>
 							<TouchableOpacity
-								onPress={() => props.navigation.replace('MessageDetailScreen')}
+								onPress={() => {
+									props.navigation.navigate('MessageDetailScreen');
+									dispatch(setCurrentRoute('MessageDetailScreen'));
+								}}
 								activeOpacity={0.6}
 								style={[
 									styles.message,

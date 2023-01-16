@@ -45,7 +45,7 @@ const MessageDetailScreen: React.FC<MessageDetailScreenParams> = ({navigation}) 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: colors.sidMessageDetailBackGroundColor,
+		backgroundColor: colors.white,
 	},
 	topContainer: {
 		backgroundColor: colors.white,
