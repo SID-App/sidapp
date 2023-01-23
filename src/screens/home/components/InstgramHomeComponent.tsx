@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
 		paddingBottom: padding[3],
 	},
 	scrollContainer: {
-		marginBottom: scaledHeight(170),
+		marginBottom: scaledHeight(90),
 	},
 	topBarVectorText: {
 		flexDirection: 'row',

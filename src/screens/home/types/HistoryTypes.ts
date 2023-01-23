@@ -1,3 +1,8 @@
+export type message = {
+	id?: any;
+	message?: any;
+	station?: any;
+};
 export type HistoryDataType = {
 	id: number;
 	name: string;
@@ -9,4 +14,5 @@ export type HistoryDataType = {
 	newMessage?: any;
 	isRead?: boolean;
 	haveMessage?: number;
+	messages?: any[];
 };

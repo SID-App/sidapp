@@ -2,9 +2,8 @@ import React from 'react';
 import HomeStack from '../home/HomeStack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {scaledHeight, scaledWidth} from '@/utils/responsive';
-import {colors} from '@/theme';
+import {colors, padding} from '@/theme';
 import {Image, StyleSheet, View} from 'react-native';
-
 import IconSvgBottomHome from '@/assets/svg/BottomTab/IconSvgBottomHome';
 import IconSvgBottomIndicator from '@/assets/svg/BottomTab/IconSvgBottomIndicator';
 import SignInStack from '../auth/SignInStack';
@@ -13,7 +12,6 @@ import IconSvgBottomMessage from '@/assets/svg/BottomTab/IconSvgBottomMessage';
 import MessageStack from '../message/MessageStack';
 import SignUpStack from '../auth/SignUpStack';
 import BottomSheetModal from '@/components/BottomSheetModal';
-import {useAppSelector} from '@/redux/hooks';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
 export type AppStackNavigatorParams = {
@@ -39,7 +37,6 @@ const AppStack = () => {
 		);
 	};
 
-	const globalSelector = useAppSelector(state => state.globalSlice);
 	return (
 		<AppStackNavigator.Navigator
 			screenOptions={{
@@ -48,6 +45,8 @@ const AppStack = () => {
 				tabBarStyle: {
 					backgroundColor: colors.sidOrangeColor,
 					width: '100%',
+					height: scaledHeight(80),
+					paddingTop: padding[1],
 				},
 			}}
 			initialRouteName="HomeStack">
@@ -102,14 +101,13 @@ const AppStack = () => {
 				name="MessageStack"
 				component={MessageStack}
 				options={({route}) => ({
-					tabBarStyle: (route => {
+					tabBarStyle: (_ => {
 						const routeName = getFocusedRouteNameFromRoute(route) ?? '';
 						if (routeName === 'MessageDetailScreen') {
 							return {
 								zIndex: -1,
 								position: 'absolute',
-								bottom: -500,
-								backfaceVisibility: 'hidden',
+								bottom: -400,
 							};
 						}
 						return {width: '100%', backgroundColor: colors.sidOrangeColor};
@@ -166,7 +164,7 @@ const AppStack = () => {
 const styles = StyleSheet.create({
 	indicator: {
 		position: 'absolute',
-		marginTop: scaledHeight(14),
+		marginTop: scaledHeight(12),
 		marginRight: scaledWidth(2),
 	},
 	circleProfile: {

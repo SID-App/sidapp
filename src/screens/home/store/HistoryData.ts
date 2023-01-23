@@ -11,6 +11,23 @@ export const HistoryData: HistoryDataType[] = [
 		newMessage: '3',
 		isRead: true,
 		haveMessage: 1,
+		messages: [
+			{
+				id: 1,
+				message: 'Bu cinsler çok tatlı oluyor!',
+				station: 3, //1 tek tık, 2 çift tık okunmadı 3 çift tık okundu
+			},
+			{
+				id: 2,
+				message: 'Bu cinsler çok tatlı oluyor!',
+				station: 2, //1 tek tık, 2 çift tık okunmadı 3 çift tık okundu
+			},
+			{
+				id: 3,
+				message: 'Bu cinsler çok tatlı oluyor!',
+				station: 1, //1 tek tık, 2 çift tık okunmadı 3 çift tık okundu
+			},
+		],
 	},
 	{
 		id: 2,
@@ -23,6 +40,13 @@ export const HistoryData: HistoryDataType[] = [
 		newMessage: '',
 		isRead: false,
 		haveMessage: 2,
+		messages: [
+			{
+				id: 1,
+				message: 'Teşekkürler',
+				station: 2, //1 tek tık, 2 çift tık okunmadı 3 çift tık okundu
+			},
+		],
 	},
 	{
 		id: 3,

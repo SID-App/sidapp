@@ -7,6 +7,7 @@ type SidInputProps = {
 	label?: React.ReactNode | React.ReactNode[];
 	labelHidden?: boolean;
 	rightComponent?: React.ReactNode;
+	leftComponent?: React.ReactNode;
 	error?: string | boolean;
 	containerStyle?: any;
 } & TextInputProps;
@@ -70,6 +71,7 @@ const SidInput = forwardRef((props: SidInputProps, ref: any) => {
 					{props.rightComponent}
 				</View>
 			)}
+			{props.leftComponent && <View style={[styles.leftComponentStyle]}>{props.leftComponent}</View>}
 		</View>
 	);
 });
@@ -85,6 +87,11 @@ const styles = StyleSheet.create({
 	rightComponentStyle: {
 		position: 'absolute',
 		right: 0,
+		zIndex: 9999,
+	},
+	leftComponentStyle: {
+		position: 'absolute',
+		left: scaledWidth(10),
 		zIndex: 9999,
 	},
 	compStyle: {
